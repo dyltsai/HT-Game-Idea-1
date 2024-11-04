@@ -1,0 +1,90 @@
+Monkey Vroom Vroom
+
+You are a monkey swinging on vines. The goal is to get as far as possible. There will be a global leaderboard, and the game will get progressively harder the farther you go. 
+
+Some ways this will happen: 
+while swinging back and forth on the vine, the pace increases (makes it harder to time a jump)
+Obstacles appear (like a bird might fly by and you have to wait for it to pass/jump over it)
+Jump distances will vary
+
+
+
+Purpose:
+	Entertaining game that engages the user by giving them a score every run. The leaderboard makes the game more addicting because there is a goal to reach; also, the score you get per run is important because it encourages the user to play again to get a higher score
+
+Target audience: 
+	All
+Interests: 
+	people that are bored and need something to do. Could be played in class (not in compsci though)
+
+Functionality: You are a monkey swinging back and forth on a vine. You need to time a jump to grab the next vine to progress. The goal is to get as far as possible
+Jump using space bar. Vine swinging is automatic (not controlled by player)
+Bananas in the air give extra score, but requires a certain angle to jump at
+
+Start screen: explanation of controls and goal. 
+
+Death mechanic: only one life per run. When monkey falls, game over screen appears
+
+HUD: current score, high score, all time leaderboard
+
+------------------------------------------------------------------------------------------------
+ChatGPT generated mockup description:
+Gameplay Screen
+Background:
+
+A lush, vibrant jungle scene with layered trees in varying shades of green. The sky is bright blue with fluffy white clouds to add a cheerful atmosphere.
+Main Character:
+
+The monkey is center-stage, swinging on a vine. It's designed with big, expressive eyes and a wide grin, exuding excitement. The monkey's fur is a warm brown, contrasting nicely with the greenery.
+Vines:
+
+Several colorful vines hang down at different angles and lengths, some close together for strategic jumps. Each vine has a slight sway animation to indicate movement.
+Obstacles:
+
+Cartoonish birds flutter across the screen in playful colors (e.g., bright red, yellow, and blue). Their flight paths are shown with dashed lines, adding a dynamic element.
+Collectibles:
+
+Floating bananas appear in various positions, each with a sparkling effect or a soft glow to catch the player's eye.
+HUD Elements:
+
+Current Score: Positioned at the top left in bold, playful font with a small banana icon.
+High Score: Located at the top right, styled similarly to the current score for consistency.
+Leaderboard Icon: A small trophy icon at the bottom corner, hinting at global rankings.
+2. Start Screen
+Background:
+
+Maintains the jungle theme with vibrant colors, featuring more vines and playful animals peeking from behind trees.
+Title Banner:
+
+A bold, fun title “Monkey Vroom Vroom” at the top, styled with banana graphics intertwined in the letters.
+Instructions:
+
+A text box in the center with engaging instructions: “Press SPACE to jump!” accompanied by playful graphics, such as arrows pointing to the monkey.
+Start Button:
+
+A large, colorful button labeled “Start” with a cheerful monkey icon, placed centrally for easy access.
+3. Game Over Screen
+Background:
+
+A slightly dimmed version of the jungle scene, with softer colors to indicate a loss.
+Game Over Message:
+
+Large, bold text saying “Game Over!” with the monkey looking surprised, its arms raised in a comical way.
+Score Display:
+
+Clearly show the final score achieved during the run, centered in a playful font. Include a message like “Your Score: 1200!”
+Buttons:
+
+Restart Button: A vibrant, eye-catching button labeled “Try Again!” with an animated glow, inviting players to jump back in.
+Design Style
+Color Palette:
+
+Use bright greens, yellows, blues, and browns, evoking a lively, fun jungle atmosphere.
+Art Style:
+
+Cartoonish and exaggerated, with smooth lines and a playful aesthetic, appealing to players of all ages.
+------------------------------------------------------------------------------------------------
+
+
+
+
