@@ -21,8 +21,11 @@ Some ways the game will become harder as you progress:
 - Controls for jumping and swinging will be a single-tap to jump.
 //
 KZ: The description "time a jump" is kinda vague. So the swing will give momentum to the swinging monkey and the player will need to decide how much momentum the monkey needs(so the monkey will be thrown in a more parabolic way?)? Will the vine swinging be different or will they all have the same speed? Is the entire vine swinging or it just the monkey? Also the path of swing would be better if it's around 1/4 of a circle directed to the front/up (> half a circle would take too much time and thus start to feel annoying)
+<<<<<<< HEAD
 
 vine would swing automatically, whole thing is swinging. your idea for a path is good
+=======
+>>>>>>> origin/main
 //
 
 ### Obstacles
@@ -32,8 +35,11 @@ vine would swing automatically, whole thing is swinging. your idea for a path is
 KZ: 
 just to clarify can players skip over vines? So the monkey just needs to touch any part of the next vine to catch it?  
 can birds touch the monkey before the monkey takes off? 
+<<<<<<< HEAD
 
 yes, no
+=======
+>>>>>>> origin/main
 //
 
 
@@ -52,8 +58,11 @@ yes, no
 - Bright and engaging visuals that appeal to a wide range of audiences.
 // 
 KZ: The monkey should be positioned on the left hand side instead of the middle if the game is not planning to add obstacles coming from the back. This will give the player more space to see what is coming up. 
+<<<<<<< HEAD
 
 agree
+=======
+>>>>>>> origin/main
 // 
 
 ---

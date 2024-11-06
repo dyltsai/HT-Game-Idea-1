@@ -8,7 +8,6 @@ Obstacles appear (like a bird might fly by and you have to wait for it to pass/j
 Jump distances will vary
 
 
-
 Purpose:
 	Entertaining game that engages the user by giving them a score every run. The leaderboard makes the game more addicting because there is a goal to reach; also, the score you get per run is important because it encourages the user to play again to get a higher score
 
@@ -16,6 +15,7 @@ Target audience:
 	All
 Interests: 
 	people that are bored and need something to do. Could be played in class (not in compsci though)
+
 
 Functionality: You are a monkey swinging back and forth on a vine. You need to time a jump to grab the next vine to progress. The goal is to get as far as possible
 Jump using space bar. Vine swinging is automatic (not controlled by player)
