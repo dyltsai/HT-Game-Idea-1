@@ -1,160 +1,124 @@
-# Monkey Vroom Vroom Game Architecture
+### 1. **GameManager**
 
-## 1. Core Game Structure
+Manages the main game loop, difficulty progression, and overall game state.
 
-### **GameManager**
-- **Purpose**: Oversees the entire game. This is the main controller that starts the game, switches scenes (like start, gameplay, and game over), and manages the player’s score and difficulty level.
-- **Variables**:
-  - `app`: Creates the main PixiJS application, which handles rendering and user interactions.
-  - `currentScene`: Stores the currently active scene (like Start, Game, or Game Over).
-  - `score`: Tracks the player’s score.
-  - `difficulty`: Keeps track of the current difficulty level, which increases as the player progresses.
-- **Methods**:
-  - `initialize()`: Sets up the game by creating the PixiJS app, setting up the main game container, and starting with the `StartScene`.
-  - `changeScene(newScene)`: Switches the active scene by removing the old one and setting the new one.
-  - `update(delta)`: Runs every frame, calling the update method of the active scene.
+- **Variables**
+  - `score: int` - Tracks the player's current score.
+  - `isGameOver: boolean` - Indicates if the game is over.
+  - `currentVine: Vine` - Tracks the current vine the monkey is on.
+  - `monkey: Monkey` - Instance of the Monkey character.
+  - `obstacles: list of Obstacle` - List of active obstacles like birds.
+  - `difficultyLevel: int` - The current difficulty level, affecting vine speed and obstacle frequency.
 
----
+- **Methods**
+  - **`initializeGame`**
+    - **Behavior**: Sets up the initial game state, including the first vine and monkey position.
+  - **`updateScore`**
+    - **Behavior**: Increases the score as the monkey moves farther in the game.
+  - **`progressDifficulty`**
+    - **Behavior**: Adjusts the game difficulty based on the player’s progress, increasing vine speed and obstacle frequency.
+  - **`checkGameOver`**
+    - **Behavior**: Ends the game if certain conditions (e.g., collision or missed vine) are met.
+  - **`resetGame`**
+    - **Behavior**: Resets the game to its initial state for a new session.
 
-## 2. Scenes
+### 2. **Vine Class**
 
-Each scene (start, game, and game over) is managed independently, allowing smooth transitions between different game states.
+#### **Variables**
+- `length: float` - Length of the vine.
+- `swingSpeed: float` - Speed at which the vine swings back and forth.
+- `swingRange: float` - Maximum horizontal distance the vine swings (left-right range).
+- `position: Point` - The anchor point of the vine.
+- `isSwinging: boolean` - Whether the vine is actively swinging or not.
+- `grabRange: float` - The vertical range the monkey can grab the vine from top to bottom.
 
-### **BaseScene (Generic Class)**
-- **Purpose**: Acts as a base template for specific scenes (e.g., start, game, game over). Provides shared functionality.
-- **Variables**:
-  - `container`: Holds all visual elements of the scene (sprites, text, etc.).
-- **Methods**:
-  - `update(delta)`: Placeholder that is customized in each specific scene to handle updates.
-  - `destroy()`: Cleans up all elements when the scene changes to free up memory.
+#### **Methods**
+- **`startSwing()`**
+  - **Behavior**: Starts the swinging motion. Initializes the swing state.
+  - **Details**: Sets `isSwinging = true`.
 
-### **StartScene**
-- **Purpose**: Displays the start screen where players can begin the game.
-- **Methods**:
-  - `showTitle()`: Displays the game title and instructions.
-  - `startGame()`: Begins the game by switching to `GameScene` when the player presses "Start".
+- **`updateSwingPosition(deltaTime: float)`**
+  - **Input**: `deltaTime` - The time passed since the last update.
+  - **Behavior**: Updates the vine’s position based on its swing.
+  - **Details**:
+    - The horizontal position is based on the `swingRange` and the **current phase** of the swing.
+    - The vine's **swing amplitude** changes based on how far the monkey is from the top or bottom of the vine.
+    - `position.x = anchorPosition.x + swingRange * Math.sin(swingAngle)`
+    - The swing is calculated from an angle, where `swingAngle` changes with time and varies based on the `swingSpeed`.
 
-### **GameScene**
-- **Purpose**: The main gameplay scene where the monkey swings from vine to vine, encountering obstacles and collecting points.
-- **Variables**:
-  - `monkey`: Represents the monkey character.
-  - `vines`: A list of vine objects for the monkey to swing on.
-  - `obstacles`: A list of obstacles, such as birds.
-  - `scoreText`: Displays the current score.
-- **Methods**:
-  - `spawnVine()`: Creates a new vine for the monkey to jump to.
-  - `spawnObstacle()`: Adds a new obstacle to challenge the player.
-  - `update(delta)`: Updates the position of all game elements, checks for collisions, and applies game logic (like difficulty scaling).
+- **`calculateSwingPosition(monkeyPosition: Point)`**
+  - **Input**: `monkeyPosition` - Position of the monkey on the vine.
+  - **Behavior**: Calculates the vine's position based on the vertical height where the monkey grabs.
+  - **Details**: 
+    - If the monkey grabs lower on the vine (closer to the bottom), the swing is more pronounced (wider arc).
+    - `swingRange = baseSwingRange + (grabHeight / length) * maxSwingRange`
+    - The range of the swing depends on the vertical position (`grabHeight`) on the vine.
 
-### **GameOverScene**
-- **Purpose**: Shows the final score and an option to restart the game.
-- **Methods**:
-  - `showFinalScore()`: Displays the player’s final score.
-  - `restartGame()`: Restarts the game by switching back to `StartScene`.
+- **`landOnVine(monkeyPosition: Point)`**
+  - **Input**: `monkeyPosition` - Position where the monkey grabs the vine.
+  - **Behavior**: Adjusts the position of the monkey to grab the vine anywhere along its length.
+  - **Details**:
+    - The vine is now grabbable at any point, so `monkeyPosition.y` will directly correspond to where the monkey grabs.
+    - `monkey.position.y = position.y + grabHeight`
 
----
+- **`resetSwing()`**
+  - **Behavior**: Resets the swinging motion to its initial state.
+  - **Details**: 
+    - Resets `isSwinging = false` and recalculates the vine’s position to its starting point.
 
-## 3. Game Objects
+### 3. **Monkey Class**
 
-### **Monkey**
-- **Purpose**: Represents the player’s character, a monkey that swings on vines.
-- **Variables**:
-  - `sprite`: The PixiJS sprite for the monkey image.
-  - `velocity`: Controls the monkey’s speed and jump direction.
-  - `isSwinging`: Tracks if the monkey is currently swinging on a vine.
-- **Methods**:
-  - `swing()`: Animates the monkey swinging on a vine.
-  - `jump()`: Launches the monkey into the air, using `velocity` to control its direction.
-  - `applyGravity(delta)`: Gradually pulls the monkey down if it’s in the air.
+#### **Variables**
+- `position: Point` - The current position of the monkey.
+- `grabHeight: float` - The height at which the monkey grabs the vine.
+- `isJumping: boolean` - Whether the monkey is in the air, jumping off the vine.
+- `jumpTrajectory: Point` - The calculated jump trajectory that is based on the point the monkey grabbed.
 
-### **Vine**
-- **Purpose**: A vine for the monkey to grab onto and swing.
-- **Variables**:
-  - `sprite`: The visual representation of the vine.
-  - `swingSpeed`: Determines how fast the vine swings back and forth.
-- **Methods**:
-  - `updateSwing(delta)`: Moves the vine in a swinging motion.
-  - `checkGrab(monkey)`: Detects if the monkey has successfully grabbed the vine.
+#### **Methods**
+- **`jumpOffVine(vine: Vine)`**
+  - **Input**: `vine: Vine` - The vine the monkey is jumping off.
+  - **Behavior**: Calculates the jump trajectory based on where the monkey grabs the vine. The farther the monkey grabs from the top, the stronger the horizontal swing force.
+  - **Details**: 
+    - The jump trajectory (`jumpTrajectory`) depends on the **height** at which the monkey grabs the vine:
+      - `jumpTrajectory.x = swingSpeed * Math.sin(swingAngle)`
+      - `jumpTrajectory.y = (grabHeight / length) * maxJumpHeight`
+    - The `jumpTrajectory` provides the direction and distance the monkey will jump off the vine, affected by its grab position.
 
-### **Obstacle**
-- **Purpose**: Represents obstacles, such as birds, that the monkey must avoid.
-- **Variables**:
-  - `sprite`: The visual representation of the obstacle.
-  - `speed`: Controls how fast the obstacle moves across the screen.
-- **Methods**:
-  - `updatePosition(delta)`: Moves the obstacle horizontally across the screen.
-  - `checkCollision(monkey)`: Checks if the obstacle collides with the monkey.
-
-### **Collectible**
-- **Purpose**: Items that provide bonus points when collected.
-- **Variables**:
-  - `sprite`: The visual representation of the collectible item.
-  - `points`: The value in points for collecting this item.
-- **Methods**:
-  - `updatePosition(delta)`: Keeps the collectible in sync with the scene’s movement.
-  - `checkCollection(monkey)`: Detects if the monkey collects the item and increases the score.
+- **`landOnVine(vine: Vine, grabHeight: float)`**
+  - **Input**: `vine: Vine`, `grabHeight: float` - The position and the height at which the monkey grabs the vine.
+  - **Behavior**: Positions the monkey on the vine at the given height. The height affects how the swing behaves.
+  - **Details**:
+    - `monkey.position.x = vine.position.x`
+    - `monkey.position.y = vine.position.y + grabHeight`
 
 ---
 
-## 4. Systems and Utilities
+### 4. **Obstacle**
 
-### **Physics System**
-- **Purpose**: Manages physics for swinging, jumping, and gravity.
-- **Methods**:
-  - `calculateJump(monkey, vine)`: Calculates the path for the monkey’s jump.
-  - `applyGravity(monkey, delta)`: Pulls the monkey down while it’s mid-air.
+Represents birds or other obstacles the monkey must avoid.
 
-### **Collision System**
-- **Purpose**: Checks for interactions between the monkey and other game objects.
-- **Methods**:
-  - `checkCollision(sprite1, sprite2)`: Checks if two sprites touch each other.
-  - `resolveCollision(monkey, obstacle)`: Ends the game if the monkey hits an obstacle.
+- **Variables**
+  - `position: Point` - Current position of the obstacle.
+  - `movementSpeed: float` - Speed at which the obstacle moves.
 
-### **Difficulty System**
-- **Purpose**: Increases the game’s difficulty over time.
-- **Variables**:
-  - `difficultyLevel`: Tracks the current level of difficulty.
-- **Methods**:
-  - `increaseDifficulty()`: Adjusts factors like vine speed, gap distances, and obstacle frequency.
-  - `checkProgress(score)`: Periodically checks the score and increases `difficultyLevel` accordingly.
+- **Methods**
+  - **`move`**
+    - **Behavior**: Moves the obstacle across the screen at a set speed.
+  - **`checkCollisionWithMonkey`**
+    - **Input**: `Monkey monkey`
+    - **Output**: `boolean` - Returns true if the obstacle collides with the monkey.
 
 ---
 
-## 5. UI Elements
+### 5. **UIManager**
 
-### **ScoreDisplay**
-- **Purpose**: Displays the player’s score during gameplay.
-- **Variables**:
-  - `text`: The score text shown on the screen.
-- **Methods**:
-  - `updateScore(newScore)`: Updates the text to show the current score.
+Manages on-screen displays, such as the score and game over message.
 
-### **Leaderboard**
-- **Purpose**: Shows the top scores.
-- **Methods**:
-  - `fetchScores()`: Retrieves top scores from the server.
-  - `render()`: Displays the leaderboard on the screen.
+- **Variables**
+  - `scoreDisplay: UIElement` - Displays the current score.
+  - `gameOverDisplay: UIElement` - Shows the game over screen when triggered.
 
----
-
-## 6. Backend Communication
-
-### **ScoreManager**
-- **Purpose**: Manages saving and retrieving player scores.
-- **Methods**:
-  - `saveScore(score)`: Sends the player’s score to a backend server for saving.
-  - `getTopScores()`: Retrieves leaderboard scores for display.
-
----
-
-## 7. Data Flow
-
-1. **Game Start**: `GameManager` initializes `StartScene`, which waits for the player to start the game.
-2. **Gameplay**:
-   - `GameScene` runs the main gameplay loop.
-   - `Monkey`, `Vine`, and `Obstacle` objects interact, with the `Monkey` swinging and jumping.
-   - `Physics System` manages gravity and swing motion.
-   - `Collision System` checks if the monkey hits obstacles or collects items.
-3. **Difficulty Scaling**: The `Difficulty System` gradually increases game speed and challenge as the score increases.
-4. **Game Over**: When the monkey hits an obstacle, `GameOverScene` displays the final score and allows the player to retry.
-5. **Score Submission**: `ScoreManager` saves the score if it’s high enough for the leaderboard.
+- **Methods**
+  - **`updateScoreDisplay`**
+    - **Behavior**: Refreshes the score display as the player’s score increases.
+  - **`showGameOver`**
