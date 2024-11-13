@@ -1,6 +1,6 @@
 # MVP Implementation Plan
 
-## Day 1-2 (Core Framework)
+## Day 1 (Core Framework)
 
 ### GameManager Core Setup
 
@@ -20,7 +20,7 @@
 - `resetGame()`
 - `updateScore(int)`
 
----
+## Day 2
 
 ## Vine System (Core Mechanics)
 
