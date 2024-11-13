@@ -127,7 +127,7 @@ Manages obstacles that appear randomly and interact with the monkey’s movement
 
 ---
 
-### ** 4. Vine Class** **p1 since the vines can be standardized**
+### ** 4. Vine Class** **p0 since the vines can be standardized**
 
 Represents a vine for swinging, with a simplified approach to handle different lengths, swing speed, and the monkey’s grab point.
 
